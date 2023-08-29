@@ -2,14 +2,14 @@ package com.driver;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.List;
 
+import java.util.List;
 
 @Service
 public class OrderService {
 
-
     OrderRepository orderRepository = new OrderRepository();
+
     public void addOrder(Order order) {
         orderRepository.addOrder(order);
     }
@@ -19,23 +19,27 @@ public class OrderService {
     }
 
     public void addOrderPartnerPair(String orderId, String partnerId) {
-        orderRepository.addOrderPartnerPair(orderId, partnerId);
+        orderRepository.addOrderPartnerPair(orderId,partnerId);
     }
 
     public Order getOrderById(String orderId) {
-        return orderRepository.getOrderById(orderId);
+        Order order = orderRepository.getOrderById(orderId);
+        return order;
     }
 
     public DeliveryPartner getPartnerById(String partnerId) {
-        return orderRepository.getPartnerById(partnerId);
+        DeliveryPartner deliveryPartner = orderRepository.getPartnerById(partnerId);
+        return deliveryPartner;
     }
 
     public Integer getOrderCountByPartnerId(String partnerId) {
-        return OrderRepository.getOrderCountByPartnerId(partnerId);
+        Integer orderCount = orderRepository.getOrderCountByPartnerId(partnerId);
+        return orderCount;
     }
 
     public List<String> getOrdersByPartnerId(String partnerId) {
-        return orderRepository.getOrdersByPartnerId(partnerId);
+        List<String> orders = orderRepository.getOrdersByPartnerId(partnerId);
+        return orders;
     }
 
     public List<String> getAllOrders() {
@@ -47,13 +51,7 @@ public class OrderService {
     }
 
     public Integer getOrdersLeftAfterGivenTimeByPartnerId(String time, String partnerId) {
-        String[] t = time.split(":");
-        String hh = t[0];
-        String mm = t[1];
-        int h = Integer.parseInt(hh) * 60;
-        int m = Integer.parseInt(mm);
-
-        return orderRepository.getOrdersLeftAfterGivenTimeByPartnerId(h+m, partnerId);
+        return orderRepository.getOrdersLeftAfterGivenTimeByPartnerId(time,partnerId);
     }
 
     public String getLastDeliveryTimeByPartnerId(String partnerId) {

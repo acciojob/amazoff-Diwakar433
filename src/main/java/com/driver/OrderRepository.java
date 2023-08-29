@@ -57,9 +57,10 @@ public class OrderRepository {
         return deliveryPartnerHashMap.get(partnerId);
     }
 
-    public static Integer getOrderCountByPartnerId(String partnerId) {
-        DeliveryPartner deliveryPartner = new DeliveryPartner(partnerId);
-        return deliveryPartner.getNumberOfOrders();
+    public Integer getOrderCountByPartnerId(String partnerId) {
+        if (!partnerOrderHashMap.containsKey(partnerId)) return 0;
+        List<Order> list = partnerOrderHashMap.get(partnerId);
+        return list.size();
     }
 
     public List<String> getOrdersByPartnerId(String partnerId) {
@@ -85,7 +86,7 @@ public class OrderRepository {
         Integer totalOrders = getAllOrders().size();
 
         Integer countOfAssignedOrders = 0;
-        int ans = 0;
+        Integer ans = 0;
 
         for (String dp: partnerOrderHashMap.keySet()) {
             countOfAssignedOrders += getOrderCountByPartnerId(dp);
@@ -95,13 +96,18 @@ public class OrderRepository {
         return ans;
     }
 
-    public Integer getOrdersLeftAfterGivenTimeByPartnerId(int time, String partnerId) {
+    public Integer getOrdersLeftAfterGivenTimeByPartnerId(String time, String partnerId) {
+        String hh = time.substring(0,2);
+        String mm = time.substring(3);
+        int h = Integer.parseInt(hh) * 60;
+        int m = Integer.parseInt(mm);
+        int givenTime = h+m;
 
         List<Order> list = partnerOrderHashMap.get(partnerId);
         Integer count = 0;
 
         for (Order o: list) {
-            if (o.getDeliveryTime() > time) {
+            if (o.getDeliveryTime() > givenTime) {
                 count++;
             }
         }
@@ -125,16 +131,33 @@ public class OrderRepository {
         int h = time/60;
         int m = time%60;
 
-        String hh = String.valueOf(h);
-        String mm = String.valueOf(m);
+        String hh = "";
+        String mm = "";
+        if (m >= 0 && m <=9) {
+            mm = "0" + String.valueOf(m);
+        }
+        else {
+            mm = String.valueOf(m);
+        }
 
-        if(hh.length() < 2)
-            hh = '0' + hh;
+        if (h >= 0 && h <=9) {
+            hh = "0" + String.valueOf(h);
+        }
+        else {
+            hh = String.valueOf(h);
+        }
+//        String hh = ""+h;
+//        String mm = ""+m;
+//
+//        if (hh.length() == 1) {
+//            hh = '0' + hh;
+//        }
+//
+//        if (mm.length() == 1) {
+//            mm = '0' + mm;
+//        }
 
-        if(mm.length() < 2)
-            mm = '0' + mm;
-
-        return hh + ':' + mm;
+        return hh + ":" + mm;
     }
 
     public void deletePartnerById(String partnerId) {
