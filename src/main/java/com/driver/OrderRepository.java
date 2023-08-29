@@ -36,8 +36,8 @@ public class OrderRepository {
             orderList.add(orderId);
 
             dbPartnerOrder.put(partnerId, orderList);
-
-            dbDeliveryPartner.get(partnerId).setNumberOfOrders(orderList.size());
+            DeliveryPartner deliveryPartner = dbDeliveryPartner.get(partnerId);
+            deliveryPartner.setNumberOfOrders(orderList.size());
         }
     }
 
@@ -73,10 +73,8 @@ public class OrderRepository {
 
         List<String> orderList = dbPartnerOrder.get(partnerId);
         for(String order : orderList) {
-
-            if(dbOrder.get(order).getDeliveryTime() > time) {
-                countleftOrder++;
-            }
+            int deliveryTime = dbOrder.get(order).getDeliveryTime();
+            if(deliveryTime > time) countleftOrder++;
         }
         return countleftOrder;
     }
