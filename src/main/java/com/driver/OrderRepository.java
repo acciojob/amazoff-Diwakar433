@@ -106,8 +106,7 @@ public class OrderRepository {
     }
 
     public void deletePartnerById(String partnerId) {
-        DeliveryPartner dp = dbDeliveryPartner.get(partnerId);
-        dp.setNumberOfOrders(0);
+
         dbDeliveryPartner.remove(partnerId);
 
         List<String> orderList = dbPartnerOrder.get(partnerId);
@@ -119,10 +118,9 @@ public class OrderRepository {
     }
 
     public void deleteOrderById(String orderId) {
-        String partnerId = dbOrderPartner.get(orderId);
-        dbPartnerOrder.get(partnerId).remove(orderId);
-        dbDeliveryPartner.get(partnerId).setNumberOfOrders(dbDeliveryPartner.get(partnerId).getNumberOfOrders()-1);
-        dbOrderPartner.remove(orderId);
         dbOrder.remove(orderId);
+        String partnerId = dbOrderPartner.get(orderId);
+        dbOrderPartner.remove(orderId);
+        dbDeliveryPartner.get(partnerId).setNumberOfOrders(dbPartnerOrder.get(partnerId).size());
     }
 }
