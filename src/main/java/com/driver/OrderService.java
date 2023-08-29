@@ -2,7 +2,6 @@ package com.driver;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.*;
 import java.util.List;
 
 
@@ -24,8 +23,7 @@ public class OrderService {
     }
 
     public Order getOrderById(String orderId) {
-        Order order = orderRepository.getOrderById(orderId);
-        return order;
+        return orderRepository.getOrderById(orderId);
     }
 
     public DeliveryPartner getPartnerById(String partnerId) {

@@ -60,14 +60,7 @@ public class OrderRepository {
     public List<String> getOrdersByPartnerId(String partnerId) {
         List<String> orderIdList = new ArrayList<>();
         List<Order> orderList = null;
-        for(Map.Entry m : dbPartnerOrder.entrySet()) {
-            if(dbPartnerOrder.containsKey(partnerId)) {
-                orderList = dbPartnerOrder.get(partnerId);
-                break;
-            }
-        }
-        if(orderList == null)
-            return orderIdList;
+        orderList = dbPartnerOrder.get(partnerId);
         for(Order order : orderList) {
             orderIdList.add(order.getId());
         }
@@ -85,12 +78,12 @@ public class OrderRepository {
     }
 
     public Integer getCountOfUnassignedOrders() {
-        int allOrder = this.getAllOrders().size();
+        int allOrder = getAllOrders().size();
 
         int coutAssignOrder = 0;
 
         for(String m : dbPartnerOrder.keySet()) {
-            coutAssignOrder += this.getOrderCountByPartnerId(m);
+            coutAssignOrder += getOrderCountByPartnerId(m);
         }
 
         return allOrder-coutAssignOrder;
@@ -107,15 +100,7 @@ public class OrderRepository {
 
         int countleftOrder = 0;
 
-        List<Order> orderList = null;
-        for(Map.Entry el : dbPartnerOrder.entrySet()) {
-            if(dbPartnerOrder.containsKey(partnerId)) {
-                orderList = dbPartnerOrder.get(partnerId);
-                break;
-            }
-        }
-        if(orderList == null)
-            return 0;
+        List<Order> orderList = dbPartnerOrder.get(partnerId);
         for(Order order : orderList) {
             if(order.getDeliveryTime() > givenTime) {
                 countleftOrder++;
@@ -154,7 +139,7 @@ public class OrderRepository {
             hh = String.valueOf(h);
         }
 
-        time = hh+mm;
+        time = hh + ":" + mm;
 
         return time;
     }
